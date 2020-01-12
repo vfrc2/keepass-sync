@@ -1,0 +1,32 @@
+#!/bin/bash
+
+PREFIX=/usr/local
+ 
+echo Start install 
+
+function args()
+{
+    options=$(getopt -o p --long prefix: -- "$@")
+    [ $? -eq 0 ] || {
+        echo "Incorrect option provided"
+        exit 1
+    }
+    eval set -- "$options"
+    while true; do
+        case "$1" in
+        -p | --prefix)
+            shift; # The arg is next in position args
+            PREFIX=${1%/}
+            ;;
+        --)
+            shift
+            break
+            ;;
+        esac
+        shift
+    done
+}
+ 
+args $0 "$@"
+
+cp sync.sh $PREFIX/bin/keepass_sync.sh -v
